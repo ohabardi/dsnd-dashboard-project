@@ -27,7 +27,7 @@ This repository contains starter code for the **Software Engineering for Data Sc
 │   │   ├── data_table.py
 │   │   ├── dropdown.py
 │   │   ├── matplotlib_viz.py
-│   │   └── radio.py
+│   │   └── radio.pyf
 │   ├── combined_components
 │   │   ├── __init__.py
 │   │   ├── combined_component.py
