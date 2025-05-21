@@ -1,4 +1,4 @@
-from .base_component import BaseComponent
+from report.base_components.base_component import BaseComponent
 from .dropdown import Dropdown
 from .radio import Radio
 from .matplotlib_viz import MatplotlibViz
