@@ -1,30 +1,11 @@
-name: Python application
-
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
-
-jobs:
-  build:
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.11'
-
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install -e python-package
-
-    - name: Run tests
-      run: |
-        pytest
+fastapi
+matplotlib
+scikit-learn==1.5.2
+python-fasthtml==0.8.0
+scipy==1.14.1
+numpy==2.1.2
+pandas==2.2.3
+pytest
+flake8
+ipython
+-e ./python-package
