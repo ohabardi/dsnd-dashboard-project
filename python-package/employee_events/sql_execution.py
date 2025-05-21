@@ -1,30 +1,44 @@
-import sqlite3
-import pandas as pd
-from functools import wraps
+from sqlite3 import connect
 from pathlib import Path
+from functools import wraps
+import pandas as pd
 
-# Set database path
-project_root = Path(__file__).resolve().parents[1]
-db_path = project_root / "employee_events.db"
+# Using pathlib, create a `db_path` variable
+# that points to the absolute path for the `employee_events.db` file
+db_path = Path(__file__).resolve().parents[1] / "employee_events/employee_events.db"
 
-# Decorator to return list-of-tuples (default)
-def execute_sql(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        query = func(*args, **kwargs)
-        with sqlite3.connect(db_path) as conn:
-            cursor = conn.cursor()
-            result = cursor.execute(query).fetchall()
-        return result
-    return wrapper
 
-# Decorator to return pandas DataFrame
-def execute_sql_df(func):
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        query = func(*args, **kwargs)
-        with sqlite3.connect(db_path) as conn:
-            df = pd.read_sql_query(query, conn)
+# OPTION 1: MIXIN
+# Define a class called `QueryMixin`
+class QueryMixin:
+    
+    def pandas_query(self, sql_query: str) -> pd.DataFrame:
+        connection = connect(db_path)
+        df = pd.read_sql_query(sql_query, connection)
+        connection.close()
         return df
-    return wrapper
-cd python-package
+
+    def query(self, sql_query: str):
+        connection = connect(db_path)
+        cursor = connection.cursor()
+        result = cursor.execute(sql_query).fetchall()
+        connection.close()
+        return result
+
+ # Leave this code unchanged
+def query(func):
+    """
+    Decorator that runs a standard sql execution
+    and returns a list of tuples
+    """
+
+    @wraps(func)
+    def run_query(*args, **kwargs):
+        query_string = func(*args, **kwargs)
+        connection = connect(db_path)
+        cursor = connection.cursor()
+        result = cursor.execute(query_string).fetchall()
+        connection.close()
+        return result
+    
+    return run_query
