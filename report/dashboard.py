@@ -65,13 +65,17 @@ class Visualizations(CombinedComponent):
 
     def outer_div(self, *args, **kwargs):
         rendered_children = [child(*args, **kwargs) for child in self.children]
-        return Div(cls='grid', children=rendered_children)
+        div = Div(cls='grid')
+        div.children = rendered_children
+        return div
+
 
 
 
 class NotesTable(DataTable):
-    def component_data(self, name, model, entity_id):
+    def component_data(self, entity_id, model):
         return model.notes(entity_id)
+
 
 class DashboardFilters(FormGroup):
     id = "top-filters"
